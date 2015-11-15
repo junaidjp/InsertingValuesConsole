@@ -1,0 +1,156 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+DROP SCHEMA IF EXISTS `bankofdanish` ;
+CREATE SCHEMA IF NOT EXISTS `bankofdanish` DEFAULT CHARACTER SET utf8 ;
+USE `bankofdanish` ;
+
+-- -----------------------------------------------------
+-- Table `bankofdanish`.`account`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bankofdanish`.`account` ;
+
+CREATE  TABLE IF NOT EXISTS `bankofdanish`.`account` (
+  `Id` INT(11) NOT NULL ,
+  `Name` VARCHAR(100) NULL DEFAULT NULL ,
+  `FirstAccountType` VARCHAR(50) NULL DEFAULT NULL ,
+  `SecondAccountType` VARCHAR(50) NULL DEFAULT NULL ,
+  `AccountNumberOne` VARCHAR(50) NULL DEFAULT NULL ,
+  `AccountNumberTwo` VARCHAR(50) NULL DEFAULT NULL ,
+  `LoanType` VARCHAR(50) NULL DEFAULT NULL ,
+  `LoanAmount` INT(50) NULL DEFAULT NULL ,
+  `stockKey` VARCHAR(50) NULL DEFAULT NULL ,
+  PRIMARY KEY (`Id`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `bankofdanish`.`customer`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bankofdanish`.`customer` ;
+
+CREATE  TABLE IF NOT EXISTS `bankofdanish`.`customer` (
+  `customerId` INT(11) NOT NULL ,
+  `customerName` VARCHAR(55) NULL DEFAULT NULL ,
+  `phone` VARCHAR(55) NULL DEFAULT NULL ,
+  `ssn` VARCHAR(55) NULL DEFAULT NULL ,
+  `accountId` INT(11) NULL DEFAULT NULL ,
+  PRIMARY KEY (`customerId`) ,
+  INDEX `accountId` (`accountId` ASC) ,
+  CONSTRAINT `customer_ibfk_1`
+    FOREIGN KEY (`accountId` )
+    REFERENCES `bankofdanish`.`accountinfo` (`accountid` ))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `bankofdanish`.`accountinfo`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bankofdanish`.`accountinfo` ;
+
+CREATE  TABLE IF NOT EXISTS `bankofdanish`.`accountinfo` (
+  `accountid` INT(11) NOT NULL ,
+  `accountNo` VARCHAR(255) NULL DEFAULT NULL ,
+  `accountType` VARCHAR(255) NULL DEFAULT NULL ,
+  `balance` FLOAT NULL DEFAULT NULL ,
+  `customerId` INT(11) NULL DEFAULT NULL ,
+  `customername` VARCHAR(55) NULL DEFAULT NULL ,
+  PRIMARY KEY (`accountid`) ,
+  INDEX `FK33AA105B9269E1BD` (`customerId` ASC) ,
+  CONSTRAINT `FK33AA105B9269E1BD`
+    FOREIGN KEY (`customerId` )
+    REFERENCES `bankofdanish`.`customer` (`customerId` ))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `bankofdanish`.`address`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bankofdanish`.`address` ;
+
+CREATE  TABLE IF NOT EXISTS `bankofdanish`.`address` (
+  `customerid` INT(11) NULL DEFAULT NULL ,
+  `customername` VARCHAR(55) NULL DEFAULT NULL ,
+  `streetname` VARCHAR(255) NULL DEFAULT NULL ,
+  `zipcode` VARCHAR(255) NULL DEFAULT NULL ,
+  `state` VARCHAR(255) NULL DEFAULT NULL ,
+  `City` VARCHAR(255) NULL DEFAULT NULL ,
+  INDEX `customerid` (`customerid` ASC) ,
+  CONSTRAINT `address_ibfk_1`
+    FOREIGN KEY (`customerid` )
+    REFERENCES `bankofdanish`.`customer` (`customerId` ))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `bankofdanish`.`bank`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bankofdanish`.`bank` ;
+
+CREATE  TABLE IF NOT EXISTS `bankofdanish`.`bank` (
+  `bankId` INT(11) NOT NULL ,
+  `bankName` VARCHAR(255) NULL DEFAULT NULL ,
+  `bankType` VARCHAR(255) NULL DEFAULT NULL ,
+  `locatiomn` VARCHAR(200) NULL DEFAULT NULL ,
+  `empId` INT(11) NULL DEFAULT NULL ,
+  PRIMARY KEY (`bankId`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `bankofdanish`.`employee`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bankofdanish`.`employee` ;
+
+CREATE  TABLE IF NOT EXISTS `bankofdanish`.`employee` (
+  `employeeName` VARCHAR(255) NULL DEFAULT NULL ,
+  `empId` VARCHAR(255) NULL DEFAULT NULL ,
+  `ssn` VARCHAR(255) NULL DEFAULT NULL ,
+  `designatin` VARCHAR(255) NULL DEFAULT NULL ,
+  `daysOff` INT(40) NULL DEFAULT NULL )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `bankofdanish`.`stock`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bankofdanish`.`stock` ;
+
+CREATE  TABLE IF NOT EXISTS `bankofdanish`.`stock` (
+  `StockId` INT(11) NOT NULL ,
+  `StockName` VARCHAR(6) NULL DEFAULT NULL ,
+  `StockDescription` VARCHAR(50) NULL DEFAULT NULL ,
+  `StockQuantity` INT(10) NULL DEFAULT NULL ,
+  `StartingPrice` FLOAT NULL DEFAULT NULL ,
+  `EndingPRice` FLOAT NULL DEFAULT NULL ,
+  `stockKey` VARCHAR(25) NULL DEFAULT NULL ,
+  PRIMARY KEY (`StockId`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `bankofdanish`.`user`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `bankofdanish`.`user` ;
+
+CREATE  TABLE IF NOT EXISTS `bankofdanish`.`user` (
+  `id` VARCHAR(6) NULL DEFAULT NULL ,
+  `username` VARCHAR(20) NULL DEFAULT NULL ,
+  `password` VARCHAR(20) NULL DEFAULT NULL )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+USE `bankofdanish` ;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
